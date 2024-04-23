@@ -15,8 +15,11 @@ void setup() {
   
   servoDriver.gripperLift();
   servoDriver.stand();
-  delay(3000);
-//  servoDriver.afterInit();
+  delay(2000);
+  servoDriver.gripperOpen();
+  delay(2000);
+  servoDriver.gripperClose();
+  delay(2000);
 }
 
 void loop() {
@@ -29,5 +32,7 @@ void loop() {
 //  delay(2000);
 //  gripperDown();
 //  delay(2000);
-  servoDriver.tripodGait();
+  servoDriver.forwardTripodGait();  
+//  servoDriver.turnLeftTripodGait();
+//  servoDriver.turnRightTripodGait();
 }
