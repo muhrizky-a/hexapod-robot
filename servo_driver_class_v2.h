@@ -2,7 +2,7 @@
 #ifndef XSERVODRIVER_H
 #define XSERVODRIVER_H
 
-class XServoDriver {
+class XServoDriverV2 {
    private:
     Adafruit_PWMServoDriver rightDriver;
     Adafruit_PWMServoDriver leftDriver;
@@ -18,15 +18,15 @@ class XServoDriver {
     const int RIGHT_FRONT_FEMUR = 9;
     const int RIGHT_FRONT_TIBIA = 10;
 
-    const int LEFT_BACK_COXA = 0;
-    const int LEFT_BACK_FEMUR = 1;
-    const int LEFT_BACK_TIBIA = 2;
+    const int LEFT_FRONT_COXA = 0;
+    const int LEFT_FRONT_FEMUR = 1;
+    const int LEFT_FRONT_TIBIA = 2;
     const int LEFT_MID_COXA = 4;
     const int LEFT_MID_FEMUR = 5;
     const int LEFT_MID_TIBIA = 6;
-    const int LEFT_FRONT_COXA = 8;
-    const int LEFT_FRONT_FEMUR = 9;
-    const int LEFT_FRONT_TIBIA = 10;
+    const int LEFT_BACK_COXA = 8;
+    const int LEFT_BACK_FEMUR = 9;
+    const int LEFT_BACK_TIBIA = 10;
 
     const int GRIPPER_CHANNEL = 12;
     const int GRIPPER_ARM_CHANNEL = 13;
@@ -54,7 +54,7 @@ class XServoDriver {
 
     // Define constants for servo angles
     const int STAND_ANGLE = 90;
-    const int LIFTED_ANGLE = 45;
+//    const int LIFTED_ANGLE = 45;
 
     const int LIFTED_RIGHT_LEG_ANGLE = 45;
     const int LIFTED_LEFT_LEG_ANGLE = 135;
@@ -66,21 +66,31 @@ class XServoDriver {
     const int BACKWARD_RIGHT_LEG_ANGLE = 135;
     const int BACKWARD_LEFT_LEG_ANGLE = 45;
 
+    const int FORWARD_RIGHT_COXA_LEG_ANGLE = 70;
+    const int FORWARD_LEFT_COXA_LEG_ANGLE = 110;
+    const int BACKWARD_RIGHT_COXA_LEG_ANGLE = 110;
+    const int BACKWARD_LEFT_COXA_LEG_ANGLE = 70;
+
+
     const int SERVOMIN = 150;  // This is the 'minimum' pulse length count (out of 4096)
     const int SERVOMAX = 600;  // This is the 'maximum' pulse length count (out of 4096)
 
+//    int _currentAngleCoxa;
+//    int _currentAngleFemurTibia;
+
+    int currentAngles_1[2];
+    int increments_1[2];
+    int currentAngles_2[2];
+    int increments_2[2];
+
     // Define variables for timing
-    unsigned long startTime;
-    const unsigned long duration = 500;  // Adjust duration based on desired walking speed
-
-    // Define servo steps
-    unsigned long previousMillis = 0;
-    const unsigned long stepInterval = 20;  // Interval between steps (in milliseconds)
-
+    unsigned long _startTime;
+    
     // Define variables for state
     int state = 0;  // State variable to track tripod movement
+    int legStep = 0;
 
-    int _legStep = 0;
+    // int _legStep = 0;
     int angleToPulse(int angle);
 
     void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
@@ -89,7 +99,7 @@ class XServoDriver {
     void _backwardLeft(int legStep);
     void _backwardRight(int legStep);
 
-    void _tripodGait(void (XServoDriver::*callGaitFunctionRight)(int), void (XServoDriver::*callGaitFunctionLeft)(int));
+    void _tripodGait(void (XServoDriverV2::*callGaitFunctionRight)(int), void (XServoDriverV2::*callGaitFunctionLeft)(int));
 
    public:
     //  Adafruit_PWMServoDriver getRightDriver();
@@ -109,6 +119,8 @@ class XServoDriver {
     void backwardTripodGait();
     void turnLeftTripodGait();
     void turnRightTripodGait();
+    void XdoGait();
+    
 };
 
 #endif
