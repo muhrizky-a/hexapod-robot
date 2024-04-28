@@ -2,7 +2,7 @@
 
 // BEGIN PRIVATE FUNCTIONS
 // ----------
-int XServoDriverV2::angleToPulse(int angle) {
+int XServoDriverV2::_angleToPulse(int angle) {
     return map(angle, 0, 180, SERVOMIN, SERVOMAX);  // Adjust SERVOMIN and SERVOMAX as needed
 }
 // ----------

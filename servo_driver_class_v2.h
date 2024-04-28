@@ -4,8 +4,8 @@
 
 class XServoDriverV2 {
    private:
-    Adafruit_PWMServoDriver rightDriver;
-    Adafruit_PWMServoDriver leftDriver;
+    Adafruit_PWMServoDriver _rightDriver;
+    Adafruit_PWMServoDriver _leftDriver;
 
     // Define servo channels (pins in servo driver)
     const int RIGHT_BACK_COXA = 0;
@@ -52,24 +52,28 @@ class XServoDriverV2 {
          LEFT_FRONT_TIBIA},  // Front left leg (coxa, femur, tibia)
     };
 
+    // TODO: Modify the servo angle configuration as you need
+    const int COXA_LEG_ANGLE_ADDITION = 20;
+    const int LEG_ANGLE_ADDITION = 45;
+    const int LIFTED_ANGLE = 45;
+
     // Define constants for servo angles
     const int STAND_ANGLE = 90;
-//    const int LIFTED_ANGLE = 45;
 
-    const int LIFTED_RIGHT_LEG_ANGLE = 45;
-    const int LIFTED_LEFT_LEG_ANGLE = 135;
-    const int LOWERED_RIGHT_LEG_ANGLE = 135;
-    const int LOWERED_LEFT_LEG_ANGLE = 45;
+    const int LIFTED_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
+    const int LIFTED_LEFT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+    const int LOWERED_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+    const int LOWERED_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
 
-    const int FORWARD_RIGHT_LEG_ANGLE = 45;
-    const int FORWARD_LEFT_LEG_ANGLE = 135;
-    const int BACKWARD_RIGHT_LEG_ANGLE = 135;
-    const int BACKWARD_LEFT_LEG_ANGLE = 45;
+    const int FORWARD_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
+    const int FORWARD_LEFT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+    const int BACKWARD_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+    const int BACKWARD_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
 
-    const int FORWARD_RIGHT_COXA_LEG_ANGLE = 70;
-    const int FORWARD_LEFT_COXA_LEG_ANGLE = 110;
-    const int BACKWARD_RIGHT_COXA_LEG_ANGLE = 110;
-    const int BACKWARD_LEFT_COXA_LEG_ANGLE = 70;
+    const int FORWARD_RIGHT_COXA_LEG_ANGLE = STAND_ANGLE - COXA_LEG_ANGLE_ADDITION; // 70
+    const int FORWARD_LEFT_COXA_LEG_ANGLE = STAND_ANGLE + COXA_LEG_ANGLE_ADDITION; // 110;
+    const int BACKWARD_RIGHT_COXA_LEG_ANGLE = STAND_ANGLE + COXA_LEG_ANGLE_ADDITION; // 110;
+    const int BACKWARD_LEFT_COXA_LEG_ANGLE = STAND_ANGLE - COXA_LEG_ANGLE_ADDITION; // 70
 
 
     const int SERVOMIN = 150;  // This is the 'minimum' pulse length count (out of 4096)
@@ -91,7 +95,7 @@ class XServoDriverV2 {
     int legStep = 0;
 
     // int _legStep = 0;
-    int angleToPulse(int angle);
+    int _angleToPulse(int angle);
 
     void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
     void _forwardRight(int legStep);
@@ -119,8 +123,6 @@ class XServoDriverV2 {
     void backwardTripodGait();
     void turnLeftTripodGait();
     void turnRightTripodGait();
-    void XdoGait();
-    
 };
 
 #endif
