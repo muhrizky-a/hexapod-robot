@@ -13,16 +13,19 @@
   by Rizki A. Manuel
 
   Variable naming convention:
+  
   1. Creating a class
     a. Use prefix "X" e.g. XClass
   2. Variables Inside Classes
     a.  Public variables and functions are written as is without any prefix.
         Examples: var, var()
     b.  Private variables and functions are written with a single underscore (_) prefix.
-        Examples: _var, _var()
-    c.  In-function variables are written with a double underscore (__) prefix.
+        Examples: _var, func()
+    c.  Function parameters are written as is without any prefix.
+        Examples: func(int params), func(int params)
+    d.  In-function variables are written with a double underscore (__) prefix.
         Examples: __var
-    d.  Constants are private, CAPITALIZED, and does not need an underscore (_) prefixes.
+    e.  Constants are private, CAPITALIZED, and does not need an underscore (_) prefixes.
         Examples: SERVOMIN
 */
  
