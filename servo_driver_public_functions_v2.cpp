@@ -7,11 +7,16 @@ void XServoDriverV2::initDriver(Adafruit_PWMServoDriver right, Adafruit_PWMServo
     _rightDriver = right;
     _leftDriver = left;
 
+Serial.println("begin init right");
     _rightDriver.begin();
+    Serial.println("done begin init right");
     _rightDriver.setPWMFreq(60);  // Set PWM frequency (max: 1600)
+    Serial.println("begin init left");
     _leftDriver.begin();
+    Serial.println("done begin init left");
     _leftDriver.setPWMFreq(60);  // Set PWM frequency (max: 1600)
 }
+
 void XServoDriverV2::afterInit() {
     Serial.println("after init v2");
     for (int i = 0; i <= 8; i += 4) {
@@ -51,7 +56,7 @@ void XServoDriverV2::sit() {
 
 void XServoDriverV2::gripperLift() {
     Serial.println("gripper arm lifted");
-    _rightDriver.setPWM(GRIPPER_ARM_CHANNEL, 0, _angleToPulse(0));
+    _rightDriver.setPWM(GRIPPER_ARM_CHANNEL, 0, _angleToPulse(90));
 }
 
 void XServoDriverV2::gripperDown() {
@@ -70,7 +75,7 @@ const int XnumLegs = 6;
 //int XstepTime = 1000;  // Time in milliseconds for each step cycle
 int XliftedLeg = 0;    // Currently lifted leg index (0-5)
 
-const int Xduration = 200;  // Adjust duration based on desired walking speed
+const int Xduration = 250;  // Adjust duration based on desired walking speed
 const int XstepInterval = 50;  // Interval between steps (in milliseconds)
 long XpreviousMillis = 0;
 
@@ -80,16 +85,16 @@ void XServoDriverV2::forwardTripodGait() {
   
     const int targetAngles_1[4][2] = {
       {90,LIFTED_RIGHT_LEG_ANGLE},
-      {70,STAND_ANGLE},
-      {90,STAND_ANGLE},
-      {110,STAND_ANGLE},
+      {70,LOWERED_RIGHT_LEG_ANGLE},
+      {90,LOWERED_RIGHT_LEG_ANGLE},
+      {110,LOWERED_RIGHT_LEG_ANGLE},
     };
 
     const int targetAngles_2[4][2] = {
-      {90,STAND_ANGLE},
-      {110,STAND_ANGLE},
+      {90,LOWERED_RIGHT_LEG_ANGLE},
+      {110,LOWERED_RIGHT_LEG_ANGLE},
       {90,LIFTED_RIGHT_LEG_ANGLE},
-      {70,STAND_ANGLE},
+      {70,LOWERED_RIGHT_LEG_ANGLE},
     };
     
 //    currentAngles[0] = targetAngles[0][0];
@@ -162,31 +167,25 @@ void XServoDriverV2::forwardTripodGait() {
               
   
               // Set the new pulse width
-              
               _rightDriver.setPWM(0, 0, _angleToPulse(currentAngles_1[0]));
               _rightDriver.setPWM(1, 0, _angleToPulse(currentAngles_1[1]));
               _rightDriver.setPWM(2, 0, _angleToPulse(currentAngles_1[1]));
-              
               _rightDriver.setPWM(4, 0, _angleToPulse(currentAngles_2[0]));
               _rightDriver.setPWM(5, 0, _angleToPulse(currentAngles_2[1]));
               _rightDriver.setPWM(6, 0, _angleToPulse(currentAngles_2[1]));
-
               _rightDriver.setPWM(8, 0, _angleToPulse(currentAngles_1[0]));
               _rightDriver.setPWM(9, 0, _angleToPulse(currentAngles_1[1]));
               _rightDriver.setPWM(10, 0, _angleToPulse(currentAngles_1[1]));
 
-//              ---
               _leftDriver.setPWM(0, 0, _angleToPulse(currentAngles_1[0]));
               _leftDriver.setPWM(1, 0, _angleToPulse(currentAngles_1[1]));
               _leftDriver.setPWM(2, 0, _angleToPulse(currentAngles_1[1]));
-              
               _leftDriver.setPWM(4, 0, _angleToPulse(currentAngles_2[0]));
               _leftDriver.setPWM(5, 0, _angleToPulse(currentAngles_2[1]));
               _leftDriver.setPWM(6, 0, _angleToPulse(currentAngles_2[1]));
-
               _leftDriver.setPWM(8, 0, _angleToPulse(currentAngles_1[0]));
               _leftDriver.setPWM(9, 0, _angleToPulse(currentAngles_1[1]));
-              _leftDriver.setPWM(10, 0, _angleToPulse(currentAngles_1[1]));
+              _leftDriver.setPWM(10, 0, _angleToPulse(currentAngles_1[1])); 
           }
       }
       // Set the final position;

@@ -31,10 +31,11 @@
 //#include "servo_driver_class.h"
 #include "servo_driver_class_v2.h"
 Adafruit_PWMServoDriver xRightDriver = Adafruit_PWMServoDriver(0x41);
-Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x42);
+Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
 
 //XServoDriver servoDriver;
 XServoDriverV2 servoDriver;
+int xStartTime;
 
 void setup() {
     Serial.begin(9600);
@@ -44,15 +45,18 @@ void setup() {
     Wire.begin();
     servoDriver.initDriver(xRightDriver, xLeftDriver);
 
-//    servoDriver.gripperLift();
+    servoDriver.gripperLift();
     servoDriver.stand();
     delay(2000);
+//    servoDriver.gripperDown();
 //    servoDriver.gripperOpen();
-//    delay(2000);
+//    delay(1000);
 //    servoDriver.gripperClose();
-//    delay(2000);
+//    delay(1000);
 //    servoDriver.afterInit();
 //    delay(2000);
+  servoDriver.gripperLift();
+  xStartTime = millis();
 }
 
 void loop() {
@@ -65,7 +69,29 @@ void loop() {
     //  delay(2000);
     //  gripperDown();
     //  delay(2000);
-    servoDriver.forwardTripodGait();
+    Serial.print("Milidetik berjalan sejak awal loop:");
+    Serial.println(millis() - xStartTime);
+    Serial.println("=====");
+    Serial.println("");
+      servoDriver.forwardTripodGait();  
+    // Jalan 10 detik
+//    if(millis() - xStartTime < 5000){
+//      servoDriver.forwardTripodGait();  
+//    }
+
+//    if(millis() - xStartTime > 5000 && millis() - xStartTime < 10000){
+//      servoDriver.backwardTripodGait();  
+//    }
+//    if(millis() - xStartTime > 10000 && millis() - xStartTime < 15000){
+//      servoDriver.turnLeftTripodGait();  
+//    }
+//    if(millis() - xStartTime > 15000 && millis() - xStartTime < 20000){
+//      servoDriver.turnRightTripodGait();  
+//    }
+//    else {
+//      servoDriver.stand();
+//    }
+    
     //  servoDriver.turnLeftTripodGait();
     //  servoDriver.turnRightTripodGait();
 }
