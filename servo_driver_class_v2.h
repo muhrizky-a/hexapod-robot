@@ -76,13 +76,13 @@ class XServoDriverV2 {
 
     const int LIFTED_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
     const int LIFTED_LEFT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
-    const int LOWERED_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 45
-    const int LOWERED_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 135
+    const int LOWERED_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+    const int LOWERED_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
 
-    const int FORWARD_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
-    const int FORWARD_LEFT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
-    const int BACKWARD_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
-    const int BACKWARD_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
+//    const int FORWARD_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
+//    const int FORWARD_LEFT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+//    const int BACKWARD_RIGHT_LEG_ANGLE = STAND_ANGLE + LEG_ANGLE_ADDITION; // 135
+//    const int BACKWARD_LEFT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
 
     const int FORWARD_RIGHT_COXA_LEG_ANGLE = STAND_ANGLE - COXA_LEG_ANGLE_ADDITION; // 70
     const int FORWARD_LEFT_COXA_LEG_ANGLE = STAND_ANGLE + COXA_LEG_ANGLE_ADDITION; // 110;
@@ -98,15 +98,29 @@ class XServoDriverV2 {
     //// Pre-filled leg movement config variables
     int _legStepsPerCycle = _legStepCycleDuration / _intervalBetweenLegSteps;  // interval ms per step
     long _legStepPreviousMillis = 0; // Store variables to stores time to fire the _intervalBetweenLegSteps
-    
-    //// Store currentAngles set in tripod legs
-    int _currentAngles_1[2];
-    int _currentAngles_2[2];
 
-    //// Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
-    int _increments_1[2];
-    int _increments_2[2];
     
+
+    //// [Auto-filled later] Store currentAngles set in tripod legs
+    // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+    int _rightFrontBackCurrentAngles[2];
+    int _rightMidCurrentAngles[2];
+    int _leftFrontBackCurrentAngles[2];
+    int _leftMidCurrentAngles[2];
+
+    //// [Auto-filled later] Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
+    //// The index 0 is coxa angle, the index 1 is femur and tibia angle.
+    int _rightFrontBackIncrements[2];
+    int _rightMidIncrements[2];
+    int _leftFrontBackIncrements[2];
+    int _leftMidIncrements[2];
+
+    void _tripodGait(
+      int rightFrontBackTargetAngles[][2],
+      int rightMidTargetAngles[][2],
+      int leftFrontBackTargetAngles[][2],
+      int leftMidTargetAngles[][2]
+    );
     
     // Functions
     int _angleToPulse(int angle);
@@ -117,10 +131,11 @@ class XServoDriverV2 {
     void _backwardLeft(int legStep);
     void _backwardRight(int legStep);
 
-    void _setCurrentLegAngles(int coxaAngle1, int femurTibiaAngle1, int coxaAngle2, int femurTibiaAngle2);
+    void _setAllCurrentLegAngles(int coxaAngle, int femurTibiaAngle);
 
     // Gait base Functions    
-    void _tripodGait(int targetAngles_1[][2], int targetAngles_2[][2]);
+//    void _tripodGait(int targetAngles_1[][2], int targetAngles_2[][2]);
+    void _tripodGait();
 
    public:
     //  Adafruit_PWMServoDriver getRightDriver();

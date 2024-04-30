@@ -76,12 +76,15 @@ void loop() {
     Serial.println(millis() - xStartTime);
     Serial.println("=====");
     Serial.println("");
-      servoDriver.forwardTripodGait();  
+    servoDriver.forwardTripodGait();  
+//    servoDriver.backwardTripodGait();  
+//    servoDriver.turnLeftTripodGait(); 
+//    servoDriver.turnRightTripodGait();   
+
     // Jalan 10 detik
 //    if(millis() - xStartTime < 5000){
 //      servoDriver.forwardTripodGait();  
 //    }
-
 //    if(millis() - xStartTime > 5000 && millis() - xStartTime < 10000){
 //      servoDriver.backwardTripodGait();  
 //    }
@@ -91,10 +94,7 @@ void loop() {
 //    if(millis() - xStartTime > 15000 && millis() - xStartTime < 20000){
 //      servoDriver.turnRightTripodGait();  
 //    }
-//    else {
+//    if(millis() - xStartTime > 20000){
 //      servoDriver.stand();
 //    }
-    
-    //  servoDriver.turnLeftTripodGait();
-    //  servoDriver.turnRightTripodGait();
 }

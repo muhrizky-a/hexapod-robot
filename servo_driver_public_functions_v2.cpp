@@ -7,7 +7,7 @@ void XServoDriverV2::initDriver(Adafruit_PWMServoDriver right, Adafruit_PWMServo
     _rightDriver = right;
     _leftDriver = left;
 
-Serial.println("begin init right");
+    Serial.println("begin init right");
     _rightDriver.begin();
     Serial.println("done begin init right");
     _rightDriver.setPWMFreq(60);  // Set PWM frequency (max: 1600)
@@ -31,9 +31,7 @@ void XServoDriverV2::stand() {
         _leftDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
     }
 
-    _setCurrentLegAngles(
-      STAND_ANGLE,
-      STAND_ANGLE,
+    _setAllCurrentLegAngles(
       STAND_ANGLE,
       STAND_ANGLE
     );
@@ -76,22 +74,165 @@ void XServoDriverV2::gripperClose() {
 
 
 void XServoDriverV2::forwardTripodGait() {
-  Serial.println("STARTO Forward");    
-  const int targetAngles_1[4][2] = {
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][2] = {
     {90,LIFTED_RIGHT_LEG_ANGLE},
     {70,LOWERED_RIGHT_LEG_ANGLE},
     {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE}
   };
 
-  const int targetAngles_2[4][2] = {
+  int __rightMidTargetAngles[4][2] = {
     {90,LOWERED_RIGHT_LEG_ANGLE},
     {110,LOWERED_RIGHT_LEG_ANGLE},
     {90,LIFTED_RIGHT_LEG_ANGLE},
     {70,LOWERED_RIGHT_LEG_ANGLE},
+  };
+  
+  int __leftFrontBackTargetAngles[4][2] = {
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  int __leftMidTargetAngles[4][2] = {
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE}
   };
     
 
   // Gerak
-  _tripodGait(targetAngles_1, targetAngles_2);
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles
+  );
+}
+
+void XServoDriverV2::backwardTripodGait() {
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][2] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE}
+  };
+
+  int __rightMidTargetAngles[4][2] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE},
+  };
+  
+  int __leftFrontBackTargetAngles[4][2] = {
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  int __leftMidTargetAngles[4][2] = {
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE}
+  };
+    
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles
+  );
+}
+
+void XServoDriverV2::turnLeftTripodGait() {
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][2] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE}
+  };
+
+  int __rightMidTargetAngles[4][2] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE},
+  };
+  
+  int __leftFrontBackTargetAngles[4][2] = {
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  int __leftMidTargetAngles[4][2] = {
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE}
+  };
+    
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles
+  );
+}
+
+void XServoDriverV2::turnRightTripodGait() {
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][2] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE}
+  };
+
+  int __rightMidTargetAngles[4][2] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE},
+  };
+  
+  int __leftFrontBackTargetAngles[4][2] = {
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  int __leftMidTargetAngles[4][2] = {
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE}
+  };
+    
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles
+  );
 }
