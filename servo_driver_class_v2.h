@@ -4,10 +4,20 @@
 
 class XServoDriverV2 {
    private:
+    // SERVO DRIVERS
+    //// Define servo drivers
     Adafruit_PWMServoDriver _rightDriver;
     Adafruit_PWMServoDriver _leftDriver;
+    
+    //// Define min. and max. pulses supported for the servo drivers
+    const int SERVOMIN = 150;  // This is the 'minimum' pulse length count (out of 4096)
+    const int SERVOMAX = 600;  // This is the 'maximum' pulse length count (out of 4096)
 
-    // Define servo channels (pins in servo driver)
+
+
+
+    // SERVO LEG PINS
+    //// Define servo channels (pins in servo driver) for each leg section
     const int RIGHT_BACK_COXA = 0;
     const int RIGHT_BACK_FEMUR = 1;
     const int RIGHT_BACK_TIBIA = 2;
@@ -52,12 +62,16 @@ class XServoDriverV2 {
          LEFT_FRONT_TIBIA},  // Front left leg (coxa, femur, tibia)
     };
 
-    // TODO: Modify the servo angle configuration as you need
+
+
+
+    // LEG ANGLES
+    //// TODO: Modify the servo angle configuration as you need
     const int COXA_LEG_ANGLE_ADDITION = 20;
     const int LEG_ANGLE_ADDITION = 45;
     const int LIFTED_ANGLE = 45;
 
-    // Define constants for servo angles
+    //// Define constants for servo angles
     const int STAND_ANGLE = 90;
 
     const int LIFTED_RIGHT_LEG_ANGLE = STAND_ANGLE - LEG_ANGLE_ADDITION; // 45
@@ -75,26 +89,26 @@ class XServoDriverV2 {
     const int BACKWARD_RIGHT_COXA_LEG_ANGLE = STAND_ANGLE + COXA_LEG_ANGLE_ADDITION; // 110;
     const int BACKWARD_LEFT_COXA_LEG_ANGLE = STAND_ANGLE - COXA_LEG_ANGLE_ADDITION; // 70
 
-
-    const int SERVOMIN = 150;  // This is the 'minimum' pulse length count (out of 4096)
-    const int SERVOMAX = 600;  // This is the 'maximum' pulse length count (out of 4096)
-
-//    int _currentAngleCoxa;
-//    int _currentAngleFemurTibia;
-
-    int currentAngles_1[2];
-    int increments_1[2];
-    int currentAngles_2[2];
-    int increments_2[2];
-
-    // Define variables for timing
-    unsigned long _startTime;
     
-    // Define variables for state
-    int state = 0;  // State variable to track tripod movement
-    int legStep = 0;
+    // SERVO LEG MOVEMEMTS
+    //// TODO: Define leg movement duration
+    const int _legStepCycleDuration = 250;  // Adjust duration based on desired walking speed (in miliseconds)
+    const int _intervalBetweenLegSteps = 50;  // Interval between steps (in milliseconds)
 
-    // int _legStep = 0;
+    //// Pre-filled leg movement config variables
+    int _legStepsPerCycle = _legStepCycleDuration / _intervalBetweenLegSteps;  // interval ms per step
+    long _legStepPreviousMillis = 0; // Store variables to stores time to fire the _intervalBetweenLegSteps
+    
+    //// Store currentAngles set in tripod legs
+    int _currentAngles_1[2];
+    int _currentAngles_2[2];
+
+    //// Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
+    int _increments_1[2];
+    int _increments_2[2];
+    
+    
+    // Functions
     int _angleToPulse(int angle);
 
     void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
@@ -103,7 +117,10 @@ class XServoDriverV2 {
     void _backwardLeft(int legStep);
     void _backwardRight(int legStep);
 
-    void _tripodGait(void (XServoDriverV2::*callGaitFunctionRight)(int), void (XServoDriverV2::*callGaitFunctionLeft)(int));
+    void _setCurrentLegAngles(int coxaAngle1, int femurTibiaAngle1, int coxaAngle2, int femurTibiaAngle2);
+
+    // Gait base Functions    
+    void _tripodGait(int targetAngles_1[][2], int targetAngles_2[][2]);
 
    public:
     //  Adafruit_PWMServoDriver getRightDriver();
