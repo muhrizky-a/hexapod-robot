@@ -22,7 +22,8 @@ void XServoDriverV2::_tripodGait(
   int rightFrontBackTargetAngles[][2],
   int rightMidTargetAngles[][2],
   int leftFrontBackTargetAngles[][2],
-  int leftMidTargetAngles[][2]
+  int leftMidTargetAngles[][2],
+  int legStepCycleLength
 ){
     auto __adjustAngle = [&](int& targetAngle, int& currentAngle, int& increment) -> void {
       if (targetAngle < currentAngle) {
@@ -31,12 +32,10 @@ void XServoDriverV2::_tripodGait(
       } else if (targetAngle > currentAngle) {
         currentAngle += increment;
       }
-//      Serial.println("currentAngle inside: ");
-//      Serial.println(currentAngle);
     };
     
     // Gerak
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < legStepCycleLength; i++){
       for (int j = 0; j < 2; j++) {
         _rightFrontBackIncrements[j] = rightFrontBackTargetAngles[i][j] - _rightFrontBackCurrentAngles[j];
         _rightMidIncrements[j] = rightMidTargetAngles[i][j] - _rightMidCurrentAngles[j];
@@ -115,5 +114,7 @@ void XServoDriverV2::_tripodGait(
 //      delay(1000);
     }
 }
+
+
 // ----------
 // END PRIVATE FUNCTIONS

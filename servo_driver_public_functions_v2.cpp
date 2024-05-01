@@ -72,8 +72,24 @@ void XServoDriverV2::gripperClose() {
     _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(0));
 }
 
+void XServoDriverV2::leanFront() {
+  // Loop for servo on channel starts in 0, 4, 8
+  for (int i = 0; i <= 8; i += 4) {
+    // This will control servo on channel 0,1,2, then 4,5,6, then 8,9,10
+    _rightDriver.setPWM(i, 0, _angleToPulse(BACKWARD_RIGHT_COXA_LEG_ANGLE));
+    _rightDriver.setPWM(i + 1, 0, _angleToPulse(STAND_ANGLE));
+    _rightDriver.setPWM(i + 2, 0, _angleToPulse(STAND_ANGLE));
+    
+    _leftDriver.setPWM(i, 0, _angleToPulse(BACKWARD_LEFT_COXA_LEG_ANGLE));
+    _leftDriver.setPWM(i + 1, 0, _angleToPulse(STAND_ANGLE));
+    _leftDriver.setPWM(i + 2, 0, _angleToPulse(STAND_ANGLE));
+  }
+}
+
 
 void XServoDriverV2::forwardTripodGait() {
+  int __legStepCycleLength = 4;
+  
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
   int __rightFrontBackTargetAngles[4][2] = {
@@ -110,11 +126,14 @@ void XServoDriverV2::forwardTripodGait() {
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
     __leftFrontBackTargetAngles,
-    __leftMidTargetAngles
+    __leftMidTargetAngles,
+    __legStepCycleLength
   );
 }
 
 void XServoDriverV2::backwardTripodGait() {
+  int __legStepCycleLength = 4;
+  
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
   int __rightFrontBackTargetAngles[4][2] = {
@@ -151,11 +170,14 @@ void XServoDriverV2::backwardTripodGait() {
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
     __leftFrontBackTargetAngles,
-    __leftMidTargetAngles
+    __leftMidTargetAngles,
+    __legStepCycleLength
   );
 }
 
 void XServoDriverV2::turnLeftTripodGait() {
+  int __legStepCycleLength = 4;
+  
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
   int __rightFrontBackTargetAngles[4][2] = {
@@ -192,11 +214,14 @@ void XServoDriverV2::turnLeftTripodGait() {
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
     __leftFrontBackTargetAngles,
-    __leftMidTargetAngles
+    __leftMidTargetAngles,
+    __legStepCycleLength
   );
 }
 
 void XServoDriverV2::turnRightTripodGait() {
+  int __legStepCycleLength = 4;
+  
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
   int __rightFrontBackTargetAngles[4][2] = {
@@ -233,6 +258,7 @@ void XServoDriverV2::turnRightTripodGait() {
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
     __leftFrontBackTargetAngles,
-    __leftMidTargetAngles
+    __leftMidTargetAngles,
+    __legStepCycleLength
   );
 }
