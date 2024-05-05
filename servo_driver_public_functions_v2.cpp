@@ -31,24 +31,28 @@ void XServoDriverV2::stand() {
         _leftDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
     }
 
+    int angles[2] = {STAND_ANGLE, STAND_ANGLE};
     _setAllCurrentLegAngles(
-      STAND_ANGLE,
-      STAND_ANGLE
+      angles,
+      angles,
+      angles,
+      angles,
+      angles,
+      angles
     );
 }
 
 void XServoDriverV2::sit() {
     Serial.println("sit");
-    for (int i = 0; i <= 8; i += 4) {
-        _rightDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
-        _leftDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
-    }
 
     // Loop for servo on channel starts in 0, 4, 8
     for (int i = 0; i <= 8; i += 4) {
-        // This will control servo on channel 1,2, then 5,6, then 9, 10
+        // This will control servo on channel 0,1,2, then 4,5,6, then 8,9, 10
+        _rightDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
         _rightDriver.setPWM(i + 1, 0, _angleToPulse(LIFTED_RIGHT_LEG_ANGLE));
         _rightDriver.setPWM(i + 2, 0, _angleToPulse(LIFTED_RIGHT_LEG_ANGLE));
+
+        _leftDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
         _leftDriver.setPWM(i + 1, 0, _angleToPulse(LIFTED_LEFT_LEG_ANGLE));
         _leftDriver.setPWM(i + 2, 0, _angleToPulse(LIFTED_LEFT_LEG_ANGLE));
     }
@@ -72,7 +76,7 @@ void XServoDriverV2::gripperClose() {
     _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(0));
 }
 
-void XServoDriverV2::leanFront() {
+void XServoDriverV2::leanToFront() {
   // Loop for servo on channel starts in 0, 4, 8
   for (int i = 0; i <= 8; i += 4) {
     // This will control servo on channel 0,1,2, then 4,5,6, then 8,9,10
@@ -86,6 +90,11 @@ void XServoDriverV2::leanFront() {
   }
 }
 
+void XServoDriverV2::gripperReady() {
+  stand();
+  gripperDown();
+  gripperOpen();
+}
 
 void XServoDriverV2::forwardTripodGait() {
   int __legStepCycleLength = 4;
@@ -125,8 +134,70 @@ void XServoDriverV2::forwardTripodGait() {
   _tripodGait(
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
     __leftFrontBackTargetAngles,
     __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __legStepCycleLength
+  );
+}
+
+void XServoDriverV2::forwardClimbTripodGait() {
+  int __legStepCycleLength = 4;
+  
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontTargetAngles[4][2] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {70,STAND_ANGLE},
+    {90,STAND_ANGLE},
+    {110,STAND_ANGLE}
+  };
+
+  int __rightMidTargetAngles[4][2] = {
+    {90,STAND_ANGLE},
+    {110,STAND_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {70,STAND_ANGLE},
+  };
+
+  int __rightBackTargetAngles[4][2] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE}
+  };
+  
+  int __leftFrontTargetAngles[4][2] = {
+    {90,STAND_ANGLE},
+    {70,STAND_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,STAND_ANGLE}
+  };
+
+  int __leftMidTargetAngles[4][2] = {
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,STAND_ANGLE},
+    {90,STAND_ANGLE},
+    {70,STAND_ANGLE}
+  };
+
+  int __leftBackTargetAngles[4][2] = {
+    {90,LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE}
+  };
+    
+
+  // Gerak
+  _tripodGait(
+    __rightBackTargetAngles,
+    __rightMidTargetAngles,
+    __rightFrontTargetAngles,
+    __leftFrontTargetAngles,
+    __leftMidTargetAngles,
+    __leftBackTargetAngles,
     __legStepCycleLength
   );
 }
@@ -169,8 +240,10 @@ void XServoDriverV2::backwardTripodGait() {
   _tripodGait(
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
     __leftFrontBackTargetAngles,
     __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
     __legStepCycleLength
   );
 }
@@ -213,8 +286,10 @@ void XServoDriverV2::turnLeftTripodGait() {
   _tripodGait(
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
     __leftFrontBackTargetAngles,
     __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
     __legStepCycleLength
   );
 }
@@ -257,8 +332,10 @@ void XServoDriverV2::turnRightTripodGait() {
   _tripodGait(
     __rightFrontBackTargetAngles,
     __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
     __leftFrontBackTargetAngles,
     __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
     __legStepCycleLength
   );
 }

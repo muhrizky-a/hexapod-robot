@@ -40,7 +40,10 @@ Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
 //XServoDriver servoDriver;
 //XServoMovement servoMovement();
 XServoDriverV2 servoDriver;
-int xStartTime;
+
+// start time before entering loop() sequence, in miliseconds
+unsigned long xStartTime;
+
 
 void setup() {
     Serial.begin(9600);
@@ -65,6 +68,8 @@ void setup() {
 }
 
 void loop() {
+  // Counts the times since the beginning of the loop, in miliseconds
+  unsigned long timesElapsed = millis() - xStartTime;
     //  stand();
     //  delay(3000);
     //  sit();
@@ -75,28 +80,61 @@ void loop() {
     //  gripperDown();
     //  delay(2000);
     Serial.print("Milidetik berjalan sejak awal loop:");
-    Serial.println(millis() - xStartTime);
+    
+    Serial.println(timesElapsed);
     Serial.println("=====");
     Serial.println("");
-    servoDriver.forwardTripodGait();  
+
+//    servoDriver.forwardTripodGait();  
+    servoDriver.forwardClimbTripodGait();  
 //    servoDriver.backwardTripodGait();  
 //    servoDriver.turnLeftTripodGait(); 
 //    servoDriver.turnRightTripodGait();   
 
-    // Jalan 10 detik
-//    if(millis() - xStartTime < 5000){
+    // Jalan test
+//    if(timesElapsed < 5000){
 //      servoDriver.forwardTripodGait();  
 //    }
-//    if(millis() - xStartTime > 5000 && millis() - xStartTime < 10000){
+//    if(timesElapsed > 5000 && timesElapsed < 10000){
 //      servoDriver.backwardTripodGait();  
 //    }
-//    if(millis() - xStartTime > 10000 && millis() - xStartTime < 15000){
+//    if(timesElapsed > 10000 && timesElapsed < 15000){
 //      servoDriver.turnLeftTripodGait();  
 //    }
-//    if(millis() - xStartTime > 15000 && millis() - xStartTime < 20000){
+//    if(timesElapsed > 15000 && timesElapsed < 20000){
 //      servoDriver.turnRightTripodGait();  
 //    }
-//    if(millis() - xStartTime > 20000){
+//    if(timesElapsed > 20000){
+//      servoDriver.stand();  
+//    }
+
+    // Jalan di Arena
+//    if(timesElapsed < 10000){
+//      servoDriver.forwardTripodGait();  
+//    }
+//    if(timesElapsed > 10000 && timesElapsed < 15000){
+//      servoDriver.turnLeftTripodGait();  
+//    }
+//    if(timesElapsed > 15000 && timesElapsed < 20000){
+//      servoDriver.forwardTripodGait();  
+//    }
+//    if(timesElapsed > 15000 && timesElapsed < 16000){
+//      servoDriver.gripperReady();
+//    }
+//    if(timesElapsed > 16000 && timesElapsed < 16500){
+//      servoDriver.leanToFront();
+//    }
+//    if(timesElapsed > 16500 && timesElapsed < 17000){
+//      servoDriver.gripperClose();
+//    }
+//    if(timesElapsed > 17000 && timesElapsed < 17500){
 //      servoDriver.stand();
+//      servoDriver.gripperLift();
+//    }
+//    if(timesElapsed > 17500 && timesElapsed < 22500){
+//      servoDriver.turnRightTripodGait();
+//    }
+//    if(timesElapsed > 22500){
+//      servoDriver.forwardTripodGait();
 //    }
 }

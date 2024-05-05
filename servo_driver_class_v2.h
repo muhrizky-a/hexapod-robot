@@ -98,17 +98,21 @@ class XServoDriverV2 {
 
     //// [Auto-filled later] Store currentAngles set in tripod legs
     // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-    int _rightFrontBackCurrentAngles[2];
+    int _rightFrontCurrentAngles[2];
     int _rightMidCurrentAngles[2];
-    int _leftFrontBackCurrentAngles[2];
+    int _rightBackCurrentAngles[2];
+    int _leftFrontCurrentAngles[2];
     int _leftMidCurrentAngles[2];
+    int _leftBackCurrentAngles[2];
 
     //// [Auto-filled later] Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
     //// The index 0 is coxa angle, the index 1 is femur and tibia angle.
-    int _rightFrontBackIncrements[2];
+    int _rightFrontIncrements[2];
     int _rightMidIncrements[2];
-    int _leftFrontBackIncrements[2];
+    int _rightBackIncrements[2];
+    int _leftFrontIncrements[2];
     int _leftMidIncrements[2];
+    int _leftBackIncrements[2];
 
     void _tripodGait(
       int rightFrontBackTargetAngles[][2],
@@ -120,32 +124,40 @@ class XServoDriverV2 {
     // Functions
     int _angleToPulse(int angle);
 
-    void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
+//    void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
 //    void _forwardRight(int legStep);
 //    void _forwardLeft(int legStep);
 //    void _backwardLeft(int legStep);
 //    void _backwardRight(int legStep);
 
-    void _setAllCurrentLegAngles(int coxaAngle, int femurTibiaAngle);
+    //// Set all current servos' angles
+    //// The index 0 is coxa angle, the index 1 is femur and tibia angle.
+    void _setAllCurrentLegAngles(
+      int rightFrontAngles[2],
+      int rightMidAngles[2],
+      int rightBackAngles[2],
+      int leftFrontAngles[2],
+      int leftMidAngles[2],
+      int leftBackAngles[2]
+    );
 
     // Gait base Functions    
     void _tripodGait(
-      int rightFrontBackTargetAngles[][2],
+      int rightFrontTargetAngles[][2],
       int rightMidTargetAngles[][2],
-      int leftFrontBackTargetAngles[][2],
+      int rightBackTargetAngles[][2],
+      
+      int leftFrontTargetAngles[][2],
       int leftMidTargetAngles[][2],
+      int leftBackTargetAngles[][2],
+      
       int legStepCycleLength
     );
 
-    // void _tripodGait();
-    
-
    public:
-    //  Adafruit_PWMServoDriver getRightDriver();
-    //  Adafruit_PWMServoDriver getLeftDriver();
     void initDriver(Adafruit_PWMServoDriver right, Adafruit_PWMServoDriver left);
 
-    // Static servo legs Movements
+    // Static servo legs Movesments
     void afterInit();
     void stand();
     void sit();
@@ -153,10 +165,15 @@ class XServoDriverV2 {
     void gripperDown();
     void gripperOpen();
     void gripperClose();
-    void leanFront();
-
+    void leanToFront();
+    
+    // Operation
+    void gripperReady();
+    void gripObject();
+    
     // Dynamic servo legs Movements
     void forwardTripodGait();
+    void forwardClimbTripodGait();
     void backwardTripodGait();
     void turnLeftTripodGait();
     void turnRightTripodGait();
