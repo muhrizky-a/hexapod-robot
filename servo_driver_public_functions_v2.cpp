@@ -31,7 +31,7 @@ void XServoDriverV2::stand() {
         _leftDriver.setPWM(i, 0, _angleToPulse(STAND_ANGLE));
     }
 
-    int angles[2] = {STAND_ANGLE, STAND_ANGLE};
+    int angles[3] = {STAND_ANGLE, STAND_ANGLE, STAND_ANGLE};
     _setAllCurrentLegAngles(
       angles,
       angles,
@@ -90,43 +90,37 @@ void XServoDriverV2::leanToFront() {
   }
 }
 
-void XServoDriverV2::gripperReady() {
-  stand();
-  gripperDown();
-  gripperOpen();
-}
-
 void XServoDriverV2::forwardTripodGait() {
   int __legStepCycleLength = 4;
   
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-  int __rightFrontBackTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE}
+  int __rightFrontBackTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
   };
 
-  int __rightMidTargetAngles[4][2] = {
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
+  int __rightMidTargetAngles[4][3] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
   };
   
-  int __leftFrontBackTargetAngles[4][2] = {
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE}
+  int __leftFrontBackTargetAngles[4][3] = {
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
 
-  int __leftMidTargetAngles[4][2] = {
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE},
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE}
+  int __leftMidTargetAngles[4][3] = {
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
     
 
@@ -147,46 +141,46 @@ void XServoDriverV2::forwardClimbTripodGait() {
   
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-  int __rightFrontTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,STAND_ANGLE},
-    {90,STAND_ANGLE},
-    {110,STAND_ANGLE}
+  int __rightFrontTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,STAND_ANGLE, STAND_ANGLE},
+    {90,STAND_ANGLE, STAND_ANGLE},
+    {110,STAND_ANGLE, STAND_ANGLE}
   };
 
-  int __rightMidTargetAngles[4][2] = {
-    {90,STAND_ANGLE},
-    {110,STAND_ANGLE},
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,STAND_ANGLE},
+  int __rightMidTargetAngles[4][3] = {
+    {90,STAND_ANGLE, STAND_ANGLE},
+    {110,STAND_ANGLE, STAND_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,STAND_ANGLE, STAND_ANGLE},
   };
 
-  int __rightBackTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE}
+  int __rightBackTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
   };
   
-  int __leftFrontTargetAngles[4][2] = {
-    {90,STAND_ANGLE},
-    {70,STAND_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,STAND_ANGLE}
+  int __leftFrontTargetAngles[4][3] = {
+    {90,STAND_ANGLE, STAND_ANGLE},
+    {70,STAND_ANGLE, STAND_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,STAND_ANGLE, STAND_ANGLE}
   };
 
-  int __leftMidTargetAngles[4][2] = {
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,STAND_ANGLE},
-    {90,STAND_ANGLE},
-    {70,STAND_ANGLE}
+  int __leftMidTargetAngles[4][3] = {
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,STAND_ANGLE, STAND_ANGLE},
+    {90,STAND_ANGLE, STAND_ANGLE},
+    {70,STAND_ANGLE, STAND_ANGLE}
   };
 
-  int __leftBackTargetAngles[4][2] = {
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE}
+  int __leftBackTargetAngles[4][3] = {
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
     
 
@@ -207,34 +201,169 @@ void XServoDriverV2::backwardTripodGait() {
   
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-  int __rightFrontBackTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE}
+  int __rightFrontBackTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
   };
 
-  int __rightMidTargetAngles[4][2] = {
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
+  int __rightMidTargetAngles[4][3] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
   };
   
-  int __leftFrontBackTargetAngles[4][2] = {
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE}
+  int __leftFrontBackTargetAngles[4][3] = {
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
 
-  int __leftMidTargetAngles[4][2] = {
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE},
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE}
+  int __leftMidTargetAngles[4][3] = {
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
     
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __legStepCycleLength
+  );
+}
+
+void XServoDriverV2::moveLeftTripodGait() {
+  int __legStepCycleLength = 4;
+  
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, 180}, // swipe end
+  };
+  
+  int __rightMidTargetAngles[4][3] = {
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, 180}, // swipe end
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+  };
+
+  int __leftFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, STAND_ANGLE}, // swipe end
+    {STAND_ANGLE,STAND_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, 0}, // step
+  }; 
+
+  int __leftMidTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, 0}, // step
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_LEFT_LEG_ANGLE, STAND_ANGLE}, // swipe end
+  };
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __legStepCycleLength
+  );
+}
+
+void XServoDriverV2::moveLeftClimbTripodGait() {
+  int __legStepCycleLength = 4;
+  
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swipe end
+  };
+  
+  int __rightMidTargetAngles[4][3] = {
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swipe end
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+  };
+
+  int __leftFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swiping
+    {STAND_ANGLE,STAND_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // swipe end
+    {STAND_ANGLE,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,STAND_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // step
+  }; 
+
+  int __leftMidTargetAngles[4][3] = {
+    {STAND_ANGLE,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,STAND_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // step
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swiping
+    {STAND_ANGLE,STAND_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // swipe end
+  };
+
+  // Gerak
+  _tripodGait(
+    __rightFrontBackTargetAngles,
+    __rightMidTargetAngles,
+    __rightFrontBackTargetAngles,
+    __leftFrontBackTargetAngles,
+    __leftMidTargetAngles,
+    __leftFrontBackTargetAngles,
+    __legStepCycleLength
+  );
+}
+
+void XServoDriverV2::moveLeftClimb1TripodGait() {
+  int __legStepCycleLength = 4;
+  
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swipe end
+  };
+  
+  int __rightMidTargetAngles[4][3] = {
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swiping
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}, // swipe end
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // lift post swipe
+    {STAND_ANGLE,LOWERED_RIGHT_LEG_ANGLE, STAND_ANGLE}, // step
+  };
+
+  int __leftFrontBackTargetAngles[4][3] = {
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swiping
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swipe end
+    {STAND_ANGLE,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,STAND_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // step
+  }; 
+
+  int __leftMidTargetAngles[4][3] = {
+    {STAND_ANGLE,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE}, // lift post swipe
+    {STAND_ANGLE,STAND_ANGLE, LOWERED_LEFT_LEG_ANGLE}, // step
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swiping
+    {STAND_ANGLE,STAND_ANGLE, STAND_ANGLE}, // swipe end
+  };
 
   // Gerak
   _tripodGait(
@@ -253,32 +382,32 @@ void XServoDriverV2::turnLeftTripodGait() {
   
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-  int __rightFrontBackTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE}
+  int __rightFrontBackTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
   };
 
-  int __rightMidTargetAngles[4][2] = {
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
+  int __rightMidTargetAngles[4][3] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
   };
   
-  int __leftFrontBackTargetAngles[4][2] = {
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE}
+  int __leftFrontBackTargetAngles[4][3] = {
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
 
-  int __leftMidTargetAngles[4][2] = {
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE},
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE}
+  int __leftMidTargetAngles[4][3] = {
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
     
 
@@ -299,32 +428,32 @@ void XServoDriverV2::turnRightTripodGait() {
   
   // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
   // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-  int __rightFrontBackTargetAngles[4][2] = {
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE}
+  int __rightFrontBackTargetAngles[4][3] = {
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
   };
 
-  int __rightMidTargetAngles[4][2] = {
-    {90,LOWERED_RIGHT_LEG_ANGLE},
-    {70,LOWERED_RIGHT_LEG_ANGLE},
-    {90,LIFTED_RIGHT_LEG_ANGLE},
-    {110,LOWERED_RIGHT_LEG_ANGLE},
+  int __rightMidTargetAngles[4][3] = {
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {110,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
   };
   
-  int __leftFrontBackTargetAngles[4][2] = {
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE},
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE}
+  int __leftFrontBackTargetAngles[4][3] = {
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
 
-  int __leftMidTargetAngles[4][2] = {
-    {90,LIFTED_LEFT_LEG_ANGLE},
-    {110,LOWERED_LEFT_LEG_ANGLE},
-    {90,LOWERED_LEFT_LEG_ANGLE},
-    {70,LOWERED_LEFT_LEG_ANGLE}
+  int __leftMidTargetAngles[4][3] = {
+    {90,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {70,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
   };
     
 

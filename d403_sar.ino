@@ -56,14 +56,6 @@ void setup() {
     servoDriver.gripperLift();
     servoDriver.stand();
     delay(2000);
-//    servoDriver.gripperDown();
-//    servoDriver.gripperOpen();
-//    delay(1000);
-//    servoDriver.gripperClose();
-//    delay(1000);
-//    servoDriver.afterInit();
-//    delay(2000);
-  servoDriver.gripperLift();
   xStartTime = millis();
 }
 
@@ -72,9 +64,7 @@ void loop() {
   unsigned long timesElapsed = millis() - xStartTime;
     //  stand();
     //  delay(3000);
-    //  sit();
-    //  delay(3000);
-    //
+
     //  gripperLift();
     //  delay(2000);
     //  gripperDown();
@@ -86,7 +76,10 @@ void loop() {
     Serial.println("");
 
 //    servoDriver.forwardTripodGait();  
-    servoDriver.forwardClimbTripodGait();  
+//    servoDriver.forwardClimbTripodGait();  
+//      servoDriver.moveLeftTripodGait();
+//      servoDriver.moveLeftClimbTripodGait();
+      servoDriver.moveLeftClimb1TripodGait();
 //    servoDriver.backwardTripodGait();  
 //    servoDriver.turnLeftTripodGait(); 
 //    servoDriver.turnRightTripodGait();   

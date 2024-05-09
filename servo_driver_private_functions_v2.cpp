@@ -7,14 +7,14 @@ int XServoDriverV2::_angleToPulse(int angle) {
 }
 
 void XServoDriverV2::_setAllCurrentLegAngles(
-  int rightFrontAngles[2],
-  int rightMidAngles[2],
-  int rightBackAngles[2],
-  int leftFrontAngles[2],
-  int leftMidAngles[2],
-  int leftBackAngles[2]
+  int rightFrontAngles[3],
+  int rightMidAngles[3],
+  int rightBackAngles[3],
+  int leftFrontAngles[3],
+  int leftMidAngles[3],
+  int leftBackAngles[3]
 ){
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 3; i++) {
       _rightFrontCurrentAngles[i] = rightFrontAngles[i];
       _rightMidCurrentAngles[i] = rightMidAngles[i];
       _rightBackCurrentAngles[i] = rightBackAngles[i];
@@ -26,14 +26,16 @@ void XServoDriverV2::_setAllCurrentLegAngles(
 }
 
 void XServoDriverV2::_tripodGait(
-  int rightFrontTargetAngles[][2],
-  int rightMidTargetAngles[][2],
-  int rightBackTargetAngles[][2],
-  int leftFrontTargetAngles[][2],
-  int leftMidTargetAngles[][2],
-  int leftBackTargetAngles[][2],
+  int rightFrontTargetAngles[][3],
+  int rightMidTargetAngles[][3],
+  int rightBackTargetAngles[][3],
+  int leftFrontTargetAngles[][3],
+  int leftMidTargetAngles[][3],
+  int leftBackTargetAngles[][3],
   int legStepCycleLength
 ){
+    int servoCountPerLeg = 3;
+  
     auto __adjustAngle = [&](int& targetAngle, int& currentAngle, int& increment) -> void {
       if (targetAngle < currentAngle) {
         currentAngle -= increment;
@@ -45,7 +47,7 @@ void XServoDriverV2::_tripodGait(
     
     // Gerak
     for(int i = 0; i < legStepCycleLength; i++){
-      for (int j = 0; j < 2; j++) {
+      for (int j = 0; j < servoCountPerLeg; j++) {
         _rightFrontIncrements[j] = rightFrontTargetAngles[i][j] - _rightFrontCurrentAngles[j];
         _rightMidIncrements[j] = rightMidTargetAngles[i][j] - _rightMidCurrentAngles[j];
         _rightBackIncrements[j] = rightBackTargetAngles[i][j] - _rightBackCurrentAngles[j];
@@ -71,7 +73,7 @@ void XServoDriverV2::_tripodGait(
               _legStepPreviousMillis = millis();
 
               // Adjust angle Increments
-              for (int j = 0; j < 2; j++) {
+              for (int j = 0; j < servoCountPerLeg; j++) {
                 __adjustAngle (
                   rightFrontTargetAngles[i][j],
                   _rightFrontCurrentAngles[j],
@@ -108,27 +110,27 @@ void XServoDriverV2::_tripodGait(
               // Set the new pulse width              
               _rightDriver.setPWM(0, 0, _angleToPulse(_rightFrontCurrentAngles[0]));
               _rightDriver.setPWM(1, 0, _angleToPulse(_rightFrontCurrentAngles[1]));
-              _rightDriver.setPWM(2, 0, _angleToPulse(_rightFrontCurrentAngles[1]));
+              _rightDriver.setPWM(2, 0, _angleToPulse(_rightFrontCurrentAngles[2]));
               
               _rightDriver.setPWM(4, 0, _angleToPulse(_rightMidCurrentAngles[0]));
               _rightDriver.setPWM(5, 0, _angleToPulse(_rightMidCurrentAngles[1]));
-              _rightDriver.setPWM(6, 0, _angleToPulse(_rightMidCurrentAngles[1]));
+              _rightDriver.setPWM(6, 0, _angleToPulse(_rightMidCurrentAngles[2]));
 
               _rightDriver.setPWM(8, 0, _angleToPulse(_rightBackCurrentAngles[0]));
               _rightDriver.setPWM(9, 0, _angleToPulse(_rightBackCurrentAngles[1]));
-              _rightDriver.setPWM(10, 0, _angleToPulse(_rightBackCurrentAngles[1]));
+              _rightDriver.setPWM(10, 0, _angleToPulse(_rightBackCurrentAngles[2]));
 
               _leftDriver.setPWM(0, 0, _angleToPulse(_leftFrontCurrentAngles[0]));
               _leftDriver.setPWM(1, 0, _angleToPulse(_leftFrontCurrentAngles[1]));
-              _leftDriver.setPWM(2, 0, _angleToPulse(_leftFrontCurrentAngles[1]));
+              _leftDriver.setPWM(2, 0, _angleToPulse(_leftFrontCurrentAngles[2]));
 
               _leftDriver.setPWM(4, 0, _angleToPulse(_leftMidCurrentAngles[0]));
               _leftDriver.setPWM(5, 0, _angleToPulse(_leftMidCurrentAngles[1]));
-              _leftDriver.setPWM(6, 0, _angleToPulse(_leftMidCurrentAngles[1]));
+              _leftDriver.setPWM(6, 0, _angleToPulse(_leftMidCurrentAngles[2]));
 
               _leftDriver.setPWM(8, 0, _angleToPulse(_leftBackCurrentAngles[0]));
               _leftDriver.setPWM(9, 0, _angleToPulse(_leftBackCurrentAngles[1]));
-              _leftDriver.setPWM(10, 0, _angleToPulse(_leftBackCurrentAngles[1])); 
+              _leftDriver.setPWM(10, 0, _angleToPulse(_leftBackCurrentAngles[2])); 
           }
       }
       

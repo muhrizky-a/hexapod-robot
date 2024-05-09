@@ -63,8 +63,6 @@ class XServoDriverV2 {
     };
 
 
-
-
     // LEG ANGLES
     //// TODO: Modify the servo angle configuration as you need
     const int COXA_LEG_ANGLE_ADDITION = 20;
@@ -87,7 +85,7 @@ class XServoDriverV2 {
     
     // SERVO LEG MOVEMEMTS
     //// TODO: Define leg movement duration
-    const int _legStepCycleDuration = 250;  // Adjust duration based on desired walking speed (in miliseconds)
+    const int _legStepCycleDuration = 500;  // Adjust duration based on desired walking speed (in miliseconds)
     const int _intervalBetweenLegSteps = 50;  // Interval between steps (in milliseconds)
 
     //// Pre-filled leg movement config variables
@@ -97,22 +95,22 @@ class XServoDriverV2 {
     
 
     //// [Auto-filled later] Store currentAngles set in tripod legs
-    // The index 0 is coxa angle, the index 1 is femur and tibia angle.
-    int _rightFrontCurrentAngles[2];
-    int _rightMidCurrentAngles[2];
-    int _rightBackCurrentAngles[2];
-    int _leftFrontCurrentAngles[2];
-    int _leftMidCurrentAngles[2];
-    int _leftBackCurrentAngles[2];
+    //// The index 0 is coxa angle, the index 1 is femur angle, and the index 2 is tibia angle.
+    int _rightFrontCurrentAngles[3];
+    int _rightMidCurrentAngles[3];
+    int _rightBackCurrentAngles[3];
+    int _leftFrontCurrentAngles[3];
+    int _leftMidCurrentAngles[3];
+    int _leftBackCurrentAngles[3];
 
     //// [Auto-filled later] Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
-    //// The index 0 is coxa angle, the index 1 is femur and tibia angle.
-    int _rightFrontIncrements[2];
-    int _rightMidIncrements[2];
-    int _rightBackIncrements[2];
-    int _leftFrontIncrements[2];
-    int _leftMidIncrements[2];
-    int _leftBackIncrements[2];
+    //// The index 0 is coxa angle, the index 1 is femur angle, and the index 2 is tibia angle.
+    int _rightFrontIncrements[3];
+    int _rightMidIncrements[3];
+    int _rightBackIncrements[3];
+    int _leftFrontIncrements[3]; 
+    int _leftMidIncrements[3];
+    int _leftBackIncrements[3];
 
     void _tripodGait(
       int rightFrontBackTargetAngles[][2],
@@ -124,32 +122,26 @@ class XServoDriverV2 {
     // Functions
     int _angleToPulse(int angle);
 
-//    void _moveServos(Adafruit_PWMServoDriver *pwmPtr, int tripodIndex, int coxaAngle, int femurTibiaAngle);
-//    void _forwardRight(int legStep);
-//    void _forwardLeft(int legStep);
-//    void _backwardLeft(int legStep);
-//    void _backwardRight(int legStep);
-
     //// Set all current servos' angles
-    //// The index 0 is coxa angle, the index 1 is femur and tibia angle.
+    //// The index 0 is coxa angle, the index 1 is femur angle, and the index 2 is tibia angle.
     void _setAllCurrentLegAngles(
-      int rightFrontAngles[2],
-      int rightMidAngles[2],
-      int rightBackAngles[2],
-      int leftFrontAngles[2],
-      int leftMidAngles[2],
-      int leftBackAngles[2]
+      int rightFrontAngles[3],
+      int rightMidAngles[3],
+      int rightBackAngles[3],
+      int leftFrontAngles[3],
+      int leftMidAngles[3],
+      int leftBackAngles[3]
     );
 
     // Gait base Functions    
     void _tripodGait(
-      int rightFrontTargetAngles[][2],
-      int rightMidTargetAngles[][2],
-      int rightBackTargetAngles[][2],
+      int rightFrontTargetAngles[][3],
+      int rightMidTargetAngles[][3],
+      int rightBackTargetAngles[][3],
       
-      int leftFrontTargetAngles[][2],
-      int leftMidTargetAngles[][2],
-      int leftBackTargetAngles[][2],
+      int leftFrontTargetAngles[][3],
+      int leftMidTargetAngles[][3],
+      int leftBackTargetAngles[][3],
       
       int legStepCycleLength
     );
@@ -168,12 +160,14 @@ class XServoDriverV2 {
     void leanToFront();
     
     // Operation
-    void gripperReady();
     void gripObject();
     
     // Dynamic servo legs Movements
     void forwardTripodGait();
     void forwardClimbTripodGait();
+    void moveLeftTripodGait();
+    void moveLeftClimbTripodGait();
+    void moveLeftClimb1TripodGait();
     void backwardTripodGait();
     void turnLeftTripodGait();
     void turnRightTripodGait();
