@@ -25,7 +25,7 @@ void XServoDriverV2::_setAllCurrentLegAngles(
     }
 }
 
-void XServoDriverV2::_tripodGait(
+void XServoDriverV2::_gait(
   int rightFrontTargetAngles[][3],
   int rightMidTargetAngles[][3],
   int rightBackTargetAngles[][3],

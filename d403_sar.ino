@@ -33,6 +33,7 @@
 
 //#include "servo_movement.h"
 #include "servo_driver_class_v2.h"
+#include "controller_receiver.h"
 
 Adafruit_PWMServoDriver xRightDriver = Adafruit_PWMServoDriver(0x41);
 Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
@@ -40,13 +41,16 @@ Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
 //XServoDriver servoDriver;
 //XServoMovement servoMovement();
 XServoDriverV2 servoDriver;
+XControllerReceiver controllerReceiver;
 
 // start time before entering loop() sequence, in miliseconds
 unsigned long xStartTime;
-
+//unsigned long lastTime = 0;
+unsigned long lastTimeToGrip = 0;
 
 void setup() {
     Serial.begin(9600);
+    Serial1.begin(9600);
     Serial.println("16 channel PWM test!");
 
     // Initialize the I2C communication
@@ -69,17 +73,52 @@ void loop() {
     //  delay(2000);
     //  gripperDown();
     //  delay(2000);
-    Serial.print("Milidetik berjalan sejak awal loop:");
-    
-    Serial.println(timesElapsed);
-    Serial.println("=====");
-    Serial.println("");
+//    Serial.print("Milidetik berjalan sejak awal loop:");
+//    Serial.println(timesElapsed);
+//    Serial.println("=====");
+//    Serial.println("");
 
+    controllerReceiver.receiveSerialData([](int v) {
+        // Your code here
+        if(v == 1){
+            servoDriver.forwardTripodGait();
+          }
+          if(v == 2){
+            servoDriver.backwardTripodGait();
+          }
+          if(v == 3){
+            servoDriver.turnLeftTripodGait(); 
+          }
+          if (v == 4){
+            servoDriver.turnRightTripodGait();
+          }
+
+          if (v == 11){
+            servoDriver.gripperClose();
+            lastTimeToGrip++;
+            Serial.print("lastTimeToGrip: ");
+            Serial.println(lastTimeToGrip);
+            
+            if(lastTimeToGrip > 5){
+              servoDriver.gripperLift();
+              lastTimeToGrip = 0;
+            }
+          }
+
+          if (v == 12){
+            lastTimeToGrip = 0;
+            servoDriver.gripperDown();
+            servoDriver.gripperOpen();
+          }
+      }
+    );
+
+//    servoDriver.leanToFront();
 //    servoDriver.forwardTripodGait();  
 //    servoDriver.forwardClimbTripodGait();  
 //      servoDriver.moveLeftTripodGait();
 //      servoDriver.moveLeftClimbTripodGait();
-      servoDriver.moveLeftClimb1TripodGait();
+//      servoDriver.moveLeftClimb1TripodGait();
 //    servoDriver.backwardTripodGait();  
 //    servoDriver.turnLeftTripodGait(); 
 //    servoDriver.turnRightTripodGait();   
