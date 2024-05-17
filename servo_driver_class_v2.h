@@ -38,7 +38,7 @@ class XServoDriverV2 {
     const int LEFT_BACK_FEMUR = 9;
     const int LEFT_BACK_TIBIA = 10;
 
-    const int GRIPPER_CHANNEL = 12;
+    const int GRIPPER_CHANNEL = 15;
     const int GRIPPER_ARM_CHANNEL = 13;
 
     const int LEG_SERVO_PINS[6][3] = {
@@ -85,7 +85,7 @@ class XServoDriverV2 {
     
     // SERVO LEG MOVEMEMTS
     //// TODO: Define leg movement duration
-    const int _legStepCycleDuration = 250;  // Adjust duration based on desired walking speed (in miliseconds)
+    int _legStepCycleDuration = 500;  // Adjust duration based on desired walking speed (in miliseconds)
     const int _intervalBetweenLegSteps = 50;  // Interval between steps (in milliseconds)
 
     //// Pre-filled leg movement config variables
@@ -111,13 +111,6 @@ class XServoDriverV2 {
     int _leftFrontIncrements[3]; 
     int _leftMidIncrements[3];
     int _leftBackIncrements[3];
-
-    void _tripodGait(
-      int rightFrontBackTargetAngles[][2],
-      int rightMidTargetAngles[][2],
-      int leftFrontBackTargetAngles[][2],
-      int leftMidTargetAngles[][2]
-    );
     
     // Functions
     int _angleToPulse(int angle);
@@ -160,14 +153,18 @@ class XServoDriverV2 {
     void leanToFront();
     
     // Operation
-    void gripObject();
+//    void gripObject();
+    void setStepDuration(int newDuration);
     
     // Dynamic servo legs Movements
     void forwardTripodGait();
     void forwardClimbTripodGait();
+    
     void moveLeftTripodGait();
     void moveLeftClimbTripodGait();
-    void moveLeftClimb1TripodGait();
+//    void moveLeftClimb1TripodGait();
+    void moveRightTripodGait();
+    
     void backwardTripodGait();
     void turnLeftTripodGait();
     void turnRightTripodGait();

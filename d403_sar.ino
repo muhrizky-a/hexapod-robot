@@ -31,15 +31,17 @@
  
 #include <Wire.h>
 
-//#include "servo_movement.h"
+//#include "x_servo_drivers.h"
+//#include "x_servo_movement.h"
 #include "servo_driver_class_v2.h"
 #include "controller_receiver.h"
 
 Adafruit_PWMServoDriver xRightDriver = Adafruit_PWMServoDriver(0x41);
 Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
 
-//XServoDriver servoDriver;
-//XServoMovement servoMovement();
+// Unused yet
+//XServoMovement servoMovement(XServoDrivers(xRightDriver,xLeftDriver));
+
 XServoDriverV2 servoDriver;
 XControllerReceiver controllerReceiver;
 
@@ -50,7 +52,7 @@ unsigned long lastTimeToGrip = 0;
 
 void setup() {
     Serial.begin(9600);
-    Serial1.begin(9600);
+//    Serial1.begin(9600);
     Serial.println("16 channel PWM test!");
 
     // Initialize the I2C communication
@@ -58,13 +60,17 @@ void setup() {
     servoDriver.initDriver(xRightDriver, xLeftDriver);
 
     servoDriver.gripperLift();
+    servoDriver.gripperClose();
+    
     servoDriver.stand();
     delay(2000);
-  xStartTime = millis();
+//    servoDriver.gripperOpen();
+    xStartTime = millis();
 }
 
 void loop() {
   // Counts the times since the beginning of the loop, in miliseconds
+  
   unsigned long timesElapsed = millis() - xStartTime;
     //  stand();
     //  delay(3000);
@@ -80,20 +86,42 @@ void loop() {
 
     controllerReceiver.receiveSerialData([](int v) {
         // Your code here
-        if(v == 1){
+        //// MOVEMENTS
+        if(v == controllerReceiver.FORWARD_COMMAND){
+            servoDriver.setStepDuration(250);
             servoDriver.forwardTripodGait();
           }
-          if(v == 2){
+          if(v == controllerReceiver.BACKWARD_COMMAND){
+            servoDriver.setStepDuration(250);
             servoDriver.backwardTripodGait();
           }
-          if(v == 3){
+          if(v == controllerReceiver.TURN_LEFT_COMMAND){
+            servoDriver.setStepDuration(250);
             servoDriver.turnLeftTripodGait(); 
           }
-          if (v == 4){
+          if (v == controllerReceiver.TURN_RIGHT_COMMAND){
+            servoDriver.setStepDuration(250);
             servoDriver.turnRightTripodGait();
           }
 
-          if (v == 11){
+          if (v == controllerReceiver.LEAN_FRONT_COMMAND){
+            servoDriver.setStepDuration(250);
+            servoDriver.leanToFront();
+          }
+          if (v == controllerReceiver.MOVE_LEFT_COMMAND){
+            servoDriver.setStepDuration(250);
+            servoDriver.moveLeftTripodGait();
+          }
+          if (v == controllerReceiver.MOVE_RIGHT_COMMAND){
+            servoDriver.setStepDuration(250);
+            servoDriver.moveRightTripodGait();
+          }
+          if (v == controllerReceiver.LEAN_BACK_COMMAND){
+            servoDriver.setStepDuration(500);
+            servoDriver.moveLeftClimbTripodGait();
+          }
+
+          if (v == controllerReceiver.GRIPPER_LIFT_COMMAND){
             servoDriver.gripperClose();
             lastTimeToGrip++;
             Serial.print("lastTimeToGrip: ");
@@ -105,7 +133,7 @@ void loop() {
             }
           }
 
-          if (v == 12){
+          if (v == controllerReceiver.GRIPPER_DOWN_COMMAND){
             lastTimeToGrip = 0;
             servoDriver.gripperDown();
             servoDriver.gripperOpen();
@@ -116,9 +144,9 @@ void loop() {
 //    servoDriver.leanToFront();
 //    servoDriver.forwardTripodGait();  
 //    servoDriver.forwardClimbTripodGait();  
-//      servoDriver.moveLeftTripodGait();
-//      servoDriver.moveLeftClimbTripodGait();
-//      servoDriver.moveLeftClimb1TripodGait();
+//    servoDriver.moveLeftTripodGait();
+//    servoDriver.moveLeftClimbTripodGait();
+//    servoDriver.moveLeftClimb1TripodGait();
 //    servoDriver.backwardTripodGait();  
 //    servoDriver.turnLeftTripodGait(); 
 //    servoDriver.turnRightTripodGait();   
