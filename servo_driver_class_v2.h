@@ -105,12 +105,18 @@ class XServoDriverV2 {
 
     //// [Auto-filled later] Store absolute value targetAngles_X[][] (in-function) - currentAngles_X[0] divided by _legStepsPerCycle
     //// The index 0 is coxa angle, the index 1 is femur angle, and the index 2 is tibia angle.
-    int _rightFrontIncrements[3];
-    int _rightMidIncrements[3];
-    int _rightBackIncrements[3];
-    int _leftFrontIncrements[3]; 
-    int _leftMidIncrements[3];
-    int _leftBackIncrements[3];
+    int _rightFrontAngleIncrements[3];
+    int _rightMidAngleIncrements[3];
+    int _rightBackAngleIncrements[3];
+    int _leftFrontAngleIncrements[3]; 
+    int _leftMidAngleIncrements[3];
+    int _leftBackAngleIncrements[3];
+
+    // "Supporting operation" variables
+    int _currentAngleSequence = -1;
+
+    //// Leg Command uses the COMMAND
+    int _legCommand = 0;
     
     // Functions
     int _angleToPulse(int angle);
@@ -126,6 +132,9 @@ class XServoDriverV2 {
       int leftBackAngles[3]
     );
 
+    // Servo legs supporting Functions
+    void _notifyChangedLegCommand(int newLegCommand);
+
     // Gait base Functions    
     void _gait(
       int rightFrontTargetAngles[][3],
@@ -139,31 +148,47 @@ class XServoDriverV2 {
       int legStepCycleLength
     );
 
+    void _gaitSingle(
+      int rightFrontTargetAngles[3],
+      int rightMidTargetAngles[3],
+      int rightBackTargetAngles[3],
+      int leftFrontTargetAngles[3],
+      int leftMidTargetAngles[3],
+      int leftBackTargetAngles[3]
+    );
+
    public:
     void initDriver(Adafruit_PWMServoDriver right, Adafruit_PWMServoDriver left);
+    // Servo legs supporting Functions in public
+    void setStepDuration(int newDuration);
+    void setLegCommand(int newLegCommand);
+    void changeGaitAngleSequence(int angleSequence);
 
-    // Static servo legs Movesments
+
+    // Single-use static servo legs Movements
     void afterInit();
     void stand();
+    void stand90();
     void sit();
     void gripperLift();
     void gripperDown();
     void gripperOpen();
     void gripperClose();
     void leanToFront();
-    
-    // Operation
-//    void gripObject();
-    void setStepDuration(int newDuration);
+    void leanToFrontSit();
+   
     
     // Dynamic servo legs Movements
     void forwardTripodGait();
     void forwardClimbTripodGait();
     
     void moveLeftTripodGait();
+    void moveLeftStableTripodGait();
     void moveLeftClimbTripodGait();
-//    void moveLeftClimb1TripodGait();
+    void moveLeftClimbTripodGaitPertamina();
+    void moveLeftClimb90TripodGait();
     void moveRightTripodGait();
+    void moveRightStableTripodGait();
     
     void backwardTripodGait();
     void turnLeftTripodGait();

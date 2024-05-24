@@ -28,13 +28,19 @@
     e.  Constants are private, CAPITALIZED, and does not need an underscore (_) prefixes.
         Examples: SERVOMIN
 */
- 
+#include <Arduino.h>
 #include <Wire.h>
+
+//#include "x_robot_arena.h"
+//XRobotArena robotArena;
 
 //#include "x_servo_drivers.h"
 //#include "x_servo_movement.h"
-#include "servo_driver_class_v2.h"
+
 #include "controller_receiver.h"
+
+//#include "servo_driver_class_v2.h"
+//XServoDriverV2 servoDriver;
 
 Adafruit_PWMServoDriver xRightDriver = Adafruit_PWMServoDriver(0x41);
 Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
@@ -42,104 +48,96 @@ Adafruit_PWMServoDriver xLeftDriver = Adafruit_PWMServoDriver(0x40);
 // Unused yet
 //XServoMovement servoMovement(XServoDrivers(xRightDriver,xLeftDriver));
 
-XServoDriverV2 servoDriver;
-XControllerReceiver controllerReceiver;
+//XServoDriverV2 servoDriver;
+//XControllerReceiver controllerReceiver;
 
 // start time before entering loop() sequence, in miliseconds
 unsigned long xStartTime;
-//unsigned long lastTime = 0;
-unsigned long lastTimeToGrip = 0;
 
 void setup() {
     Serial.begin(9600);
-//    Serial1.begin(9600);
     Serial.println("16 channel PWM test!");
 
     // Initialize the I2C communication
     Wire.begin();
-    servoDriver.initDriver(xRightDriver, xLeftDriver);
 
+    initWifiReceiver();
+    initESPNOW();
+    servoDriver.initDriver(xRightDriver, xLeftDriver);
+    delay(1000);
     servoDriver.gripperLift();
     servoDriver.gripperClose();
-    
     servoDriver.stand();
     delay(2000);
-//    servoDriver.gripperOpen();
+    
+    servoDriver.setLegCommand(1);
     xStartTime = millis();
 }
 
 void loop() {
   // Counts the times since the beginning of the loop, in miliseconds
-  
   unsigned long timesElapsed = millis() - xStartTime;
-    //  stand();
-    //  delay(3000);
-
-    //  gripperLift();
-    //  delay(2000);
-    //  gripperDown();
-    //  delay(2000);
 //    Serial.print("Milidetik berjalan sejak awal loop:");
 //    Serial.println(timesElapsed);
 //    Serial.println("=====");
 //    Serial.println("");
-
-    controllerReceiver.receiveSerialData([](int v) {
-        // Your code here
-        //// MOVEMENTS
-        if(v == controllerReceiver.FORWARD_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.forwardTripodGait();
-          }
-          if(v == controllerReceiver.BACKWARD_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.backwardTripodGait();
-          }
-          if(v == controllerReceiver.TURN_LEFT_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.turnLeftTripodGait(); 
-          }
-          if (v == controllerReceiver.TURN_RIGHT_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.turnRightTripodGait();
-          }
-
-          if (v == controllerReceiver.LEAN_FRONT_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.leanToFront();
-          }
-          if (v == controllerReceiver.MOVE_LEFT_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.moveLeftTripodGait();
-          }
-          if (v == controllerReceiver.MOVE_RIGHT_COMMAND){
-            servoDriver.setStepDuration(250);
-            servoDriver.moveRightTripodGait();
-          }
-          if (v == controllerReceiver.LEAN_BACK_COMMAND){
-            servoDriver.setStepDuration(500);
-            servoDriver.moveLeftClimbTripodGait();
-          }
-
-          if (v == controllerReceiver.GRIPPER_LIFT_COMMAND){
-            servoDriver.gripperClose();
-            lastTimeToGrip++;
-            Serial.print("lastTimeToGrip: ");
-            Serial.println(lastTimeToGrip);
-            
-            if(lastTimeToGrip > 5){
-              servoDriver.gripperLift();
-              lastTimeToGrip = 0;
-            }
-          }
-
-          if (v == controllerReceiver.GRIPPER_DOWN_COMMAND){
-            lastTimeToGrip = 0;
-            servoDriver.gripperDown();
-            servoDriver.gripperOpen();
-          }
-      }
-    );
+    
+//    receiveSerialData([](int v) {
+//        // Your code here
+//        //// MOVEMENTS
+//        if(v == FORWARD_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.forwardTripodGait();
+//          }
+//          if(v == BACKWARD_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.backwardTripodGait();
+//          }
+//          if(v == TURN_LEFT_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.turnLeftTripodGait(); 
+//          }
+//          if (v == TURN_RIGHT_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.turnRightTripodGait();
+//          }
+//
+//          if (v == LEAN_FRONT_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.leanToFront();
+//          }
+//          if (v == MOVE_LEFT_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.moveLeftTripodGait();
+//          }
+//          if (v == MOVE_RIGHT_COMMAND){
+//            servoDriver.setStepDuration(250);
+//            servoDriver.moveRightTripodGait();
+//          }
+//          if (v == LEAN_BACK_COMMAND){
+//            servoDriver.setStepDuration(500);
+//            servoDriver.moveLeftClimbTripodGait();
+//          }
+//
+//          if (v == GRIPPER_LIFT_COMMAND){
+//            servoDriver.gripperClose();
+//            lastTimeToGrip++;
+//            Serial.print("lastTimeToGrip: ");
+//            Serial.println(lastTimeToGrip);
+//            
+//            if(lastTimeToGrip > 5){
+//              servoDriver.gripperLift();
+//              lastTimeToGrip = 0;
+//            }
+//          }
+//
+//          if (v == GRIPPER_DOWN_COMMAND){
+//            lastTimeToGrip = 0;
+//            servoDriver.gripperDown();
+//            servoDriver.gripperOpen();
+//          }
+//      }
+//    );
 
 //    servoDriver.leanToFront();
 //    servoDriver.forwardTripodGait();  
@@ -152,7 +150,7 @@ void loop() {
 //    servoDriver.turnRightTripodGait();   
 
     // Jalan test
-//    if(timesElapsed < 5000){
+//    if(timesElapsed < 5000){  
 //      servoDriver.forwardTripodGait();  
 //    }
 //    if(timesElapsed > 5000 && timesElapsed < 10000){
