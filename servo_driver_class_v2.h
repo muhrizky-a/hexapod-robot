@@ -85,7 +85,7 @@ class XServoDriverV2 {
     
     // SERVO LEG MOVEMEMTS
     //// TODO: Define leg movement duration
-    int _legStepCycleDuration = 500;  // Adjust duration based on desired walking speed (in miliseconds)
+    int _legStepCycleDuration = 250;  // Adjust duration based on desired walking speed (in miliseconds)
     const int _intervalBetweenLegSteps = 50;  // Interval between steps (in milliseconds)
 
     //// Pre-filled leg movement config variables

@@ -81,64 +81,6 @@ void loop() {
 //    Serial.println(timesElapsed);
 //    Serial.println("=====");
 //    Serial.println("");
-    
-//    receiveSerialData([](int v) {
-//        // Your code here
-//        //// MOVEMENTS
-//        if(v == FORWARD_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.forwardTripodGait();
-//          }
-//          if(v == BACKWARD_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.backwardTripodGait();
-//          }
-//          if(v == TURN_LEFT_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.turnLeftTripodGait(); 
-//          }
-//          if (v == TURN_RIGHT_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.turnRightTripodGait();
-//          }
-//
-//          if (v == LEAN_FRONT_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.leanToFront();
-//          }
-//          if (v == MOVE_LEFT_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.moveLeftTripodGait();
-//          }
-//          if (v == MOVE_RIGHT_COMMAND){
-//            servoDriver.setStepDuration(250);
-//            servoDriver.moveRightTripodGait();
-//          }
-//          if (v == LEAN_BACK_COMMAND){
-//            servoDriver.setStepDuration(500);
-//            servoDriver.moveLeftClimbTripodGait();
-//          }
-//
-//          if (v == GRIPPER_LIFT_COMMAND){
-//            servoDriver.gripperClose();
-//            lastTimeToGrip++;
-//            Serial.print("lastTimeToGrip: ");
-//            Serial.println(lastTimeToGrip);
-//            
-//            if(lastTimeToGrip > 5){
-//              servoDriver.gripperLift();
-//              lastTimeToGrip = 0;
-//            }
-//          }
-//
-//          if (v == GRIPPER_DOWN_COMMAND){
-//            lastTimeToGrip = 0;
-//            servoDriver.gripperDown();
-//            servoDriver.gripperOpen();
-//          }
-//      }
-//    );
-
 //    servoDriver.leanToFront();
 //    servoDriver.forwardTripodGait();  
 //    servoDriver.forwardClimbTripodGait();  

@@ -90,11 +90,11 @@ void XServoDriverV2::gripperDown() {
 }
 
 void XServoDriverV2::gripperOpen() {
-    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(180));
+    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(90));
 }
 
 void XServoDriverV2::gripperClose() {
-    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(90));
+    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(0));
 }
 
 void XServoDriverV2::sit() {
