@@ -85,11 +85,11 @@ class XServoDriverV2 {
     
     // SERVO LEG MOVEMEMTS
     //// TODO: Define leg movement duration
-    int _legStepCycleDuration = 250;  // Adjust duration based on desired walking speed (in miliseconds)
-    const int _intervalBetweenLegSteps = 50;  // Interval between steps (in milliseconds)
+    int _LEG_STEP_CYCLE_DURATION = 250;  // Adjust duration based on desired walking speed (in miliseconds)
+    const int _INTERVAL_BETWEEN_LEG_STEPS = 50;  // Interval between steps (in milliseconds)
 
     //// Pre-filled leg movement config variables
-    int _legStepsPerCycle = _legStepCycleDuration / _intervalBetweenLegSteps;  // interval ms per step
+    int _legStepsPerCycle = _LEG_STEP_CYCLE_DURATION / _INTERVAL_BETWEEN_LEG_STEPS;  // interval ms per step
     long _legStepPreviousMillis = 0; // Store variables to stores time to fire the _intervalBetweenLegSteps
 
     
@@ -180,6 +180,7 @@ class XServoDriverV2 {
     
     // Dynamic servo legs Movements
     void forwardTripodGait();
+    void forwardDongakTripodGait();
     void forwardClimbTripodGait();
     
     void moveLeftTripodGait();

@@ -69,10 +69,10 @@ void XServoDriverV2::_gait(
       }
       
       unsigned long __startTime = millis();
-      while (millis() - __startTime <= _legStepCycleDuration) {
+      while (millis() - __startTime <= _LEG_STEP_CYCLE_DURATION) {
         
           // Check if it's time to move to the next step
-          if (millis() - _legStepPreviousMillis >= _intervalBetweenLegSteps) {
+          if (millis() - _legStepPreviousMillis >= _INTERVAL_BETWEEN_LEG_STEPS) {
 
               // Update the previousMillis for the next step
               _legStepPreviousMillis = millis();
@@ -183,10 +183,10 @@ void XServoDriverV2::_gaitSingle(
     }
     
     unsigned long __startTime = millis();
-    while (millis() - __startTime <= _legStepCycleDuration) {
+    while (millis() - __startTime <= _LEG_STEP_CYCLE_DURATION) {
       
         // Check if it's time to move to the next step
-        if (millis() - _legStepPreviousMillis >= _intervalBetweenLegSteps) {
+        if (millis() - _legStepPreviousMillis >= _INTERVAL_BETWEEN_LEG_STEPS) {
 
             // Update the previousMillis for the next step
             _legStepPreviousMillis = millis();

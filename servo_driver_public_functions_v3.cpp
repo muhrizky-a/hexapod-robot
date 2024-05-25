@@ -86,11 +86,11 @@ void XServoDriverV2::gripperLift() {
 
 void XServoDriverV2::gripperDown() {
 //    Serial.println("gripper arm down");
-    _rightDriver.setPWM(GRIPPER_ARM_CHANNEL, 0, _angleToPulse(70));
+    _rightDriver.setPWM(GRIPPER_ARM_CHANNEL, 0, _angleToPulse(80));
 }
 
 void XServoDriverV2::gripperOpen() {
-    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(90));
+    _rightDriver.setPWM(GRIPPER_CHANNEL, 0, _angleToPulse(60)); 
 }
 
 void XServoDriverV2::gripperClose() {
@@ -201,7 +201,7 @@ void XServoDriverV2::leanToFrontSit() {
 
 //// Supporting functions: setStepDuration
 void XServoDriverV2::setStepDuration(int newDuration){
-  _legStepCycleDuration = newDuration;
+  _LEG_STEP_CYCLE_DURATION = newDuration;
 }
 
 //// Supporting functions: setLegCommand
@@ -265,6 +265,65 @@ void XServoDriverV2::forwardTripodGait() {
     {50,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
     {70,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
     {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  // Gerak
+  _gaitSingle(
+    __rightFrontTargetAngles[_currentAngleSequence],
+    __rightMidTargetAngles[_currentAngleSequence],
+    __rightBackTargetAngles[_currentAngleSequence],
+    __leftFrontTargetAngles[_currentAngleSequence],
+    __leftMidTargetAngles[_currentAngleSequence],
+    __leftBackTargetAngles[_currentAngleSequence]
+  );
+}
+
+void XServoDriverV2::forwardDongakTripodGait() {
+  int __legStepCycleLength = 4;
+  changeGaitAngleSequence(__legStepCycleLength);
+  
+  // Leg Target Angles for one cycle (each cycle below consists of 4 angles).
+  // The index 0 is coxa angle, the index 1 is femur and tibia angle.
+  int __rightFrontTargetAngles[__legStepCycleLength][3] = {
+    {110,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {90,STAND_ANGLE, STAND_ANGLE},
+    {110,STAND_ANGLE, STAND_ANGLE},
+    {130,STAND_ANGLE, STAND_ANGLE}
+  };
+
+  int __rightMidTargetAngles[__legStepCycleLength][3] = {
+    {90,115, 110},
+    {110,115, 110},
+    {90,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {70,115, 110},
+  };
+
+  int __rightBackTargetAngles[__legStepCycleLength][3] = {
+    {70,LIFTED_RIGHT_LEG_ANGLE, LIFTED_RIGHT_LEG_ANGLE},
+    {50,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {70,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE},
+    {90,LOWERED_RIGHT_LEG_ANGLE, LOWERED_RIGHT_LEG_ANGLE}
+  };
+  
+  int __leftFrontTargetAngles[__legStepCycleLength][3] = {
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {110,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {130,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE}
+  };
+
+  int __leftMidTargetAngles[__legStepCycleLength][3] = {
+    {90,65, 70},
+    {110,LOWERED_LEFT_LEG_ANGLE, LOWERED_LEFT_LEG_ANGLE},
+    {90,65, 70},
+    {70,65, 70}
+  };
+
+  int __leftBackTargetAngles[__legStepCycleLength][3] = {
+    {70,STAND_ANGLE, STAND_ANGLE},
+    {50,STAND_ANGLE, STAND_ANGLE},
+    {70,LIFTED_LEFT_LEG_ANGLE, LIFTED_LEFT_LEG_ANGLE},
+    {90,STAND_ANGLE, STAND_ANGLE}
   };
 
   // Gerak

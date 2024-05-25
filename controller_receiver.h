@@ -91,6 +91,9 @@ void initWifiReceiver(){
 
 // Callback function that will be executed when data is received
 void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
+  int slowDuration = 500;
+  int fastDuration = 250;
+
   if ((millis() - lastTime) > 10) {
     memcpy(&receivedJoystickData, incomingData, sizeof(receivedJoystickData));
     Serial.print("leftX: ");
@@ -111,53 +114,54 @@ void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len) {
     int command = getCommand(receivedJoystickData);
   
     if(command == FORWARD_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(FORWARD_COMMAND);
 
       servoDriver.forwardTripodGait();
     }
     if(command == BACKWARD_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(BACKWARD_COMMAND);
       
       servoDriver.backwardTripodGait();
     }
     if(command == TURN_LEFT_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(TURN_LEFT_COMMAND);
 
       servoDriver.turnLeftTripodGait(); 
     }
     if (command == TURN_RIGHT_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(TURN_RIGHT_COMMAND);
       
       servoDriver.turnRightTripodGait();
     }
   
     if (command == LEAN_FRONT_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(slowDuration);
       servoDriver.setLegCommand(LEAN_FRONT_COMMAND);
       
 //      servoDriver.leanToFrontSit();  
-      servoDriver.leanToFront();  
+//      servoDriver.leanToFront();  
+      servoDriver.forwardDongakTripodGait();  
     }
     if (command == MOVE_LEFT_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(MOVE_LEFT_COMMAND);
       
 //      servoDriver.moveLeftTripodGait();
       servoDriver.moveLeftStableTripodGait();
     }
     if (command == MOVE_RIGHT_COMMAND){
-      servoDriver.setStepDuration(250);
+      servoDriver.setStepDuration(fastDuration);
       servoDriver.setLegCommand(MOVE_RIGHT_COMMAND);
       
 //      servoDriver.moveRightTripodGait();
       servoDriver.moveRightStableTripodGait();
     }
     if (command == LEAN_BACK_COMMAND){
-      servoDriver.setStepDuration(500);
+      servoDriver.setStepDuration(slowDuration);
       servoDriver.setLegCommand(LEAN_BACK_COMMAND);
       
       servoDriver.moveLeftClimb90TripodGait();
